@@ -31,7 +31,7 @@ int hash_gen_fold(int key, int tableSize)
 
 int hash_gen(int key, int tableSize)
 {
-  return abs(key % tableSize);
+  return hash_gen_division(key, tableSize);
 }
 
 HashTable *hash_create(const int tableSize)
@@ -51,12 +51,12 @@ HashTable *hash_create(const int tableSize)
 
 List *hash_insert(HashTable *hash, int value)
 {
-  if (!hash || hash->count == hash->size) {
+  if (!hash) {
     return NULL;
   }
 
   int i, position = hash_gen(value, hash->size);
-  hash->items[position] = list_add(hash->items[position], value);
+  hash->items[position] = list_add_unique(hash->items[position], value);
   hash->count++;
 
   return hash->items[position];
@@ -78,6 +78,21 @@ List *hash_search(HashTable *hash, int value)
     aux = aux->next;
   }
   return NULL;
+}
+
+void hash_print(HashTable *hash)
+{
+  int i;
+  for (i = 0; i < hash->size; i++) {
+    List *aux = hash->items[i];
+    printf("\nPosicao %d: ", i);
+
+    while (aux) {
+      printf("%d ", aux->value);
+      aux = aux->next;
+    }
+  }
+  printf("\n");
 }
 
 void hash_free(HashTable *hash)
