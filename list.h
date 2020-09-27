@@ -36,6 +36,19 @@ List *list_add(List *list, int value)
   return newNode;
 }
 
+List *list_add_unique(List *list, int value)
+{
+  List *aux = list;
+
+  while (aux) {
+    if (aux->value == value)
+      return list;
+    aux = aux->next;
+  }
+
+  return list_add(list, value);
+}
+
 int list_get(List *list, int index)
 {
   List *aux = list;
